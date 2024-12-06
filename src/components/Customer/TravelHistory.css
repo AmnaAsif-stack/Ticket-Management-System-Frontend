@@ -1,0 +1,48 @@
+/* General Styling */
+.travel-history-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.travel-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.travel-history-table th,
+.travel-history-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.travel-history-table th {
+  background-color: #414345;
+  color: white;
+}
+
+.travel-history-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+@media (max-width: 768px) {
+  .travel-history-table th,
+  .travel-history-table td {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .travel-history-container {
+    padding: 10px;
+  }
+  
+  .travel-history-table th,
+  .travel-history-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+}

@@ -1,0 +1,155 @@
+/* Passenger Management Page Background */
+.passenger-management-container {
+    background: url("../../assets/images/bus.jpg") no-repeat center center/cover;
+    width: 100%;
+    height: 100vh; /* Ensure full height coverage */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+    z-index: -1;
+    flex-direction: column;
+    box-sizing: content-box;
+    
+}
+
+/* Ensure the form is centered with good visibility on top of the background */
+.passenger-form-wrapper {
+    background-color: rgba(98, 96, 96, 0.8); /* Slight transparency for readability */
+    padding: 1.5rem;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    color: #fff;
+    margin: 0 1rem;
+        color: white;
+
+}
+
+/* Additional Form Styling */
+.passenger-form-container {
+    max-width: 500px;
+    margin: 1.5rem auto;
+    padding: 1rem;
+    border: 1px solid #4a4343;
+    border-radius: 8px;
+    background-color: rgba(148, 143, 143, 0.8);
+    box-sizing: border-box;
+        color: white;
+
+}
+
+  .passenger-form-wrapper h2 {
+    margin-bottom: 1rem; /* Reduced bottom margin */
+    font-size: 1.6rem; /* Reduced font size */
+  }
+  
+  .passenger-form-wrapper p {
+    margin-bottom: 1.5rem; /* Reduced bottom margin */
+    font-size: 1rem; /* Reduced font size */
+  }
+  
+
+  .passenger-form-container h2 {
+    text-align: center;
+    margin-bottom: 1rem; /* Reduced bottom margin */
+    font-size: 1.4rem; /* Reduced font size */
+    
+  }
+  
+  form div {
+    margin-bottom: 0.75rem; /* Reduced margin */
+  }
+  
+  form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.25rem; /* Reduced margin */
+    color: white;
+
+  }
+  
+  form input,
+  form select,
+  form button {
+    width: 100%;
+    padding: 0.5rem; /* Reduced padding */
+    margin-top: 0.25rem;
+  }
+  
+  form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0.5rem; /* Reduced padding for button */
+  }
+  
+  form button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .passenger-management-container {
+      padding-top: 30px; /* Adjust padding for smaller screens */
+    }
+  
+    .passenger-form-wrapper {
+      margin: 1rem; /* Add margin on both sides for smaller screens */
+      padding: 1rem; /* Adjust padding to make form more compact */
+    }
+  
+    form input,
+    form select,
+    form button {
+      padding: 0.75rem; /* Increase button padding on smaller screens */
+    }
+  
+    .passenger-form-container {
+      max-width: 100%; /* Allow the form to take full width on smaller screens */
+      margin: 1rem; /* Add margin around the form */
+    }
+  
+    .passenger-form-container h2 {
+      font-size: 1.5rem; /* Smaller heading size on mobile */
+    }
+  
+    .passenger-form-wrapper h2 {
+      font-size: 1.4rem; /* Smaller heading size */
+    }
+  
+    .passenger-form-wrapper p {
+      font-size: 1rem; /* Adjust paragraph font size for readability */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .passenger-form-wrapper {
+      padding: 1rem; /* Reduce padding further for very small screens */
+    }
+  
+    form input,
+    form select,
+    form button {
+      padding: 0.5rem; /* Reduce input padding */
+    }
+  
+    .passenger-form-container h2 {
+      font-size: 1.3rem; /* Further reduce heading size */
+    }
+  
+    .passenger-form-wrapper p {
+      font-size: 0.9rem; /* Further reduce paragraph font size */
+    }
+  
+    form button {
+      padding: 0.75rem; /* Adjust button size for smaller screens */
+    }
+  }
+  
+
+  

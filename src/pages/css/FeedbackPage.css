@@ -1,0 +1,9 @@
+.feedback-page {
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.feedback-page h2 {
+  text-align: center;
+}

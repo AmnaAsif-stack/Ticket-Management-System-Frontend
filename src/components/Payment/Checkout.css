@@ -1,0 +1,217 @@
+/* General Styles */
+.checkout-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-image: url('/src/assets/images/bus.jpg'); /* Background image for checkout page */
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  color: white;
+  box-sizing: border-box;
+  
+}
+
+h2 {
+  font-size: 2rem;
+  margin: 60px 0;
+  text-align: center;
+  
+}
+
+p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.section {
+  width: 100%;
+  max-width: 600px;
+  background-color: rgba(72, 71, 71, 0.5);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+
+ 
+}
+
+.section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.card-element{
+  color: white;
+  background-color: white;
+}
+
+.ticket-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.ticket-arrow {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: white;
+  margin: 0 10px;
+  transition: transform 0.3s;
+}
+
+.ticket-arrow:hover {
+  transform: scale(1.2);
+}
+
+button {
+  background-color: #0056b3;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #003c73;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 20px;
+  color: white;
+}
+
+form button {
+  margin-top: 20px;
+}
+
+form button:disabled {
+  background-color: #f6f4f4;
+}
+
+.card-element {
+  margin-bottom: 20px;
+}
+
+/* Stripe Card Input Fields */
+.StripeElement,
+.StripeElement--webkit-autofill {
+  color: white !important; /* Makes all Stripe card input fields white */
+}
+
+.StripeElement--invalid {
+  border-color: red !important; /* Red border for invalid input */
+}
+
+.ticket-price {
+  margin-top: 10px;
+}
+
+.stripe-error {
+  color: red;
+  margin-top: 10px;
+}
+
+.checkout-container a {
+  text-decoration: none;
+  color: white;
+  margin-top: 20px;
+}
+
+.checkout-container a button {
+  background-color: #28a745;
+  font-size: 1rem;
+  padding: 10px 20px;
+}
+
+.checkout-container a button:hover {
+  background-color: #218838;
+  color: white;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .checkout-container {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+  }
+
+  .ticket-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ticket-arrow {
+    font-size: 1.2rem;
+    margin: 5px 0;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  .checkout-container a button {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-container {
+    padding: 5px;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  p {
+    font-size: 0.8rem;
+  }
+
+  .ticket-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ticket-arrow {
+    font-size: 1rem;
+    margin: 3px 0;
+    color: white;
+  }
+
+  button {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  .checkout-container a button {
+    font-size: 0.8rem;
+  }
+}
+.ticket-price {
+  margin-top: 10px;
+  color: white; /* Ensure this is visible against the background */
+}
+
+
+

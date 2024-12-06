@@ -1,0 +1,36 @@
+/* Ensure the entire page takes full height */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Main layout container with full height and flexbox */
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* This ensures the layout fills the entire height */
+}
+
+/* The content section will take the remaining space */
+.main-content {
+  flex: 1; /* This ensures the content takes up remaining space */
+  padding: 20px;
+  box-sizing: border-box; /* Ensure padding is included in total height */
+}
+
+/* Footer styling */
+footer {
+  padding: 20px;
+  background-color: #f1f1f1;
+  text-align: center;
+  width: 100%;
+  margin-top: auto; /* This will push the footer to the bottom */
+  position: relative;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 10px; /* Adjust padding for mobile */
+  }
+}

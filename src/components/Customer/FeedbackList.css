@@ -1,0 +1,24 @@
+.feedback-list {
+    margin: 2rem auto;
+    padding: 1rem;
+    max-width: 700px;
+    text-align: center;
+  }
+  
+  .feedback-item {
+    background-color: rgba(148, 143, 143, 0.8);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    text-align: left;
+  }
+  
+  .feedback-item h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .feedback-item p {
+    font-size: 1rem;
+  }
+  

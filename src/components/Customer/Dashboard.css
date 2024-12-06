@@ -1,0 +1,792 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #333;
+  box-sizing: border-box;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+  background: url('/src/assets/images/bus.jpg') no-repeat center center/cover;
+  background-attachment: fixed;
+
+  margin-top: 60px; /* To offset the fixed header */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: auto;
+  overflow-y: scroll;
+  position: relative;
+  font-family: Arial, sans-serif;
+
+}
+
+/* Add more styles for the rest of your dashboard */
+.dashboard-section {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.dashboard-header {
+  margin-top: 50px;
+  padding: 60px;
+  border-radius: 40px;
+  color: #00bcd4;
+  width: 80%;
+  text-align: center;
+
+}
+.dashboard-content {
+  padding: 20px;
+  margin-top: 100px; /* Add top margin to prevent overlap with fixed header */
+  z-index: 1; /* Ensures the content is on top of the background */
+  color: #fcf6f6;
+
+}
+.dashboard-header h1 {
+  font-size: 3rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+  animation: slideIn 1s ease-in-out forwards;
+}
+
+.dashboard-header p {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  animation: fadeIn 1.5s ease-in forwards;
+}
+
+/* User Profile Section */
+.user-profile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e5e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  margin-top: 30px;
+  color: #000;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #f3f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: rgb(232, 225, 225);
+}
+
+.profile-details {
+  flex: 1;
+  padding-left: 20px;
+}
+
+.profile-details h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #0097a7;
+}
+
+.profile-details p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Bus Routes Section */
+.bus-routes-container {
+  width: 40%;
+  margin-top: 40px;
+  text-align: center;
+  
+}
+
+.routes-title {
+  font-size: 2rem;
+  color: #0097a7;
+  margin-bottom: 20px;
+  animation: fadeIn 1s ease-in-out;
+  
+}
+
+.routes-list {
+  margin-top: 20px;
+  background-color: #fff; /* White background for the routes list */
+  padding: 20px;
+  border-radius: 10px; /* Optional: to give a rounded look */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: soft shadow */
+}
+
+.route-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.route-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.route-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.route-card .route-details {
+  padding: 10px;
+  text-align: left;
+}
+
+.route-details h4 {
+  font-size: 1.2rem;
+  color: #0097a7;
+}
+
+.route-details p {
+  color: #555;
+}
+
+/* Ticket Booking Section */
+.ticket-booking {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+  width: 80%;
+}
+
+.ticket-booking h2 {
+  color: #0097a7;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.ticket-form input,
+.ticket-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.ticket-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0097a7;
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.ticket-form button:hover {
+  background-color: #00bcd4;
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .route-card {
+    width: 100%;
+  }
+
+  .routes-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ticket-booking {
+    width: 95%;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .dashboard-header p {
+    font-size: 1rem;
+  }
+
+  .ticket-form button {
+    font-size: 1rem;
+  }
+
+  .user-profile {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-details {
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .ticket-booking {
+    width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h1 {
+    font-size: 2rem;
+  }
+
+  .dashboard-header p {
+    font-size: 0.9rem;
+  }
+
+  .ticket-form button {
+    font-size: 0.9rem;
+  }
+
+  .routes-title {
+    font-size: 1.5rem;
+  }
+}
+.show-routes-button {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.show-routes-button {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.show-routes-button button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.show-routes-button button:hover {
+  background-color: #45a049;
+}
+.routes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  width: 100%;
+  padding: 0 20px;
+}
+.route-card {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.route-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+.route-card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.route-card p {
+  margin: 5px 0;
+}
+.route-action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.route-action-buttons button {
+  padding: 10px 20px;
+  background-color: #0097a7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.route-action-buttons button:hover {
+  background-color: #00bcd4;
+}
+
+.ticket-booking {
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
+
+.ticket-booking form input,
+.ticket-booking form select,
+.ticket-booking form button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.ticket-booking form button {
+  background-color: #0097a7;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.ticket-booking form button:hover {
+  background-color: #00bcd4;
+}
+/* Bus Routes Section */
+.bus-routes-container {
+  padding: 20px;
+}
+
+.routes-title {
+  font-size: 2rem;
+  color: #00bcd4;
+  margin-bottom: 20px;
+}
+
+/* Route Card */
+.route-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin: 15px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.route-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.route-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.route-details {
+  padding: 15px;
+  background: #f7f7f7;
+}
+
+.route-details h4 {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.route-details p {
+  color: #555;
+}
+
+.route-details strong {
+  font-weight: bold;
+}
+/* Container for the whole schedule section */
+.route-schedule {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.route-schedule h3 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.schedule-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.schedule-item {
+  flex: 1 1 calc(33% - 20px);
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.schedule-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.schedule-item h4 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.schedule-times {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schedule-time {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.schedule-time input {
+  margin-right: 10px;
+  accent-color: #4CAF50;
+}
+
+.schedule-time label {
+  font-size: 16px;
+  color: #555;
+  cursor: pointer;
+}
+
+.schedule-time label:hover {
+  color: #000;
+}
+
+.time-selection {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #edefed;
+  border-radius: 8px;
+  border: 1px solid #4CAF50;
+  font-weight: bold;
+  color: #4CAF50;
+  text-align: center;
+}
+
+.schedule-item p {
+  font-size: 14px;
+  color: #777;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button {
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled:hover {
+  background-color: #ccc;
+}
+
+.bus-schedule-section {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.bus-schedule-section h4 {
+  margin-bottom: 5px;
+}
+
+.ticket-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ticket-form select,
+.ticket-form input,
+.ticket-form button {
+  padding: 8px;
+  font-size: 1rem;
+}
+
+.ticket-form button {
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.ticket-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.bus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.bus-schedule-details {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.bus-schedule-section {
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+}
+
+button:hover {
+  background-color: #0056b3;
+}.modify-bus-timing {
+  background-color: #2c3e50; /* Dark background to make the text stand out */
+  color: white; /* White text color for better contrast */
+  border-radius: 8px; /* Rounded corners for the box */
+  padding: 20px; /* Add padding inside the box */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
+  margin-top: 20px; /* Add some spacing from other content */
+  max-width: 500px; /* Set a maximum width for better control over layout */
+  margin-left: auto; /* Center the box horizontally */
+  margin-right: auto; /* Center the box horizontally */
+}
+
+.modify-bus-timing h3 {
+  font-size: 1.5rem; /* Slightly larger font size for the heading */
+  margin-bottom: 10px; /* Add space below the heading */
+}
+
+.modify-bus-timing p {
+  margin-bottom: 15px; /* Add spacing below the paragraph */
+}
+
+.modify-bus-timing label {
+  font-size: 1.1rem; /* Slightly larger text for the label */
+  margin-bottom: 10px; /* Add space below the label */
+  display: block; /* Make the label block-level */
+  color: white;
+}
+
+.modify-bus-timing select {
+  background-color: #34495e; /* Darker background for the select dropdown */
+  color: white; /* White text inside the dropdown */
+  border: 1px solid #1abc9c; /* Border with a contrasting color */
+  border-radius: 4px; /* Rounded corners for the dropdown */
+  padding: 8px; /* Add padding inside the dropdown */
+  width: 100%; /* Make the dropdown take up full width */
+  margin-bottom: 15px; /* Space below the dropdown */
+}
+
+.modify-bus-timing button {
+  background-color: #1abc9c; /* Contrasting button background color */
+  color: white; /* White text on the button */
+  padding: 10px 20px; /* Add padding inside the button */
+  border: none; /* Remove the default border */
+  border-radius: 4px; /* Rounded corners for the button */
+  font-size: 1.1rem; /* Slightly larger font size */
+  cursor: pointer; /* Change cursor to pointer when hovering over the button */
+  transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+.modify-bus-timing button:hover {
+  background-color: #16a085; /* Darker shade when hovering */
+}
+
+.modify-bus-timing button:active {
+  background-color: #1abc9c; /* Slightly lighter shade when button is clicked */
+}
+.booking-action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.booking-action-buttons button {
+  padding: 12px 24px;
+  background-color: #0097a7;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.booking-action-buttons button:hover {
+  background-color: #007c85;
+}
+
+.ticket-info-dropdown {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.ticket-info-dropdown p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+
+
+
+
+.route-list input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.route-list ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.route-list li {
+  background-color: #f9f9f9; /* Light background for each route */
+  margin-bottom: 10px; /* Space between routes */
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for each item */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.route-list li:hover {
+  background-color: #e0e0e0; /* Slightly darker on hover */
+}
+
+.route-list li button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  background-color: #3f4a40; /* Green button */
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.route-list li button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.my-bookings-section {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.booking-list {
+  list-style: none;
+  padding: 0;
+}
+
+.booking-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+
+  
+}
+
+.cancel-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+    background-color: #4CAF50; /* Green button */
+
+}
+
+.cancel-button:hover {
+  background-color: #e60000;
+    background-color: #4CAF50; /* Green button */
+
+}
