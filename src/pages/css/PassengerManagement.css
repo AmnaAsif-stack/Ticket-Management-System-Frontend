@@ -12,6 +12,14 @@
     box-sizing: content-box;
     
 }
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  box-sizing: border-box;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
 
 /* Ensure the form is centered with good visibility on top of the background */
 .passenger-form-wrapper {
@@ -152,4 +160,52 @@
   }
   
 
+  .profile-management {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    background: url("../../assets/images/bus.jpg") no-repeat center center fixed; /* Prevent zooming */
+    background-size: cover;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+  }
+  
+  .user-information {
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for form */
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+  }
+  
+  .user-information div {
+    margin: 5px 0;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  form div {
+    margin-bottom: 10px;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
   

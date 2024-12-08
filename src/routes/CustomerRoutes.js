@@ -8,8 +8,6 @@ import Signup from "../components/Auth/Signup";
 
 // Import customer dashboard and other customer-related components
 import Dashboard from "../components/Customer/Dashboard"; 
-import BrowseRoutes from "../components/Customer/Routes/BrowseRoutes";
-import BookTicket from "../components/Tickets/BookTicket";
 import Checkout from "../components/Payment/Checkout";
 
 const CustomerRoutes = () => {
@@ -45,8 +43,7 @@ const CustomerRoutes = () => {
             <Route path="/Dashboard" element={<Dashboard />} />
 
             {/* Route Browsing and Ticket Booking */}
-            <Route path="/browse-routes" element={<BrowseRoutes />} />
-            <Route path="/book-ticket" element={<BookTicket />} />
+         
 
             {/* Payment Processing */}
         </Routes>

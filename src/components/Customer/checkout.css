@@ -1,0 +1,207 @@
+/* General Page Styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  .checkout-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0d47a1, #1976d2);
+    color: #fff;
+    font-family: Arial, sans-serif;
+  }
+  
+  .checkout-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  footer.checkout-footer {
+    background: #0a369d;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: auto;
+  }
+  
+  /* Booking Info */
+  .booking-info {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: 90%;
+    max-width: 500px;
+    text-align: left;
+  }
+  
+  .booking-info p {
+    margin: 5px 0;
+  }
+  
+  /* Ticket Quantity */
+  .ticket-quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .ticket-quantity button {
+    background: #ffcc00;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin: 0 10px;
+  }
+  
+  .ticket-quantity span {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  /* Payment Section */
+  input[type="text"] {
+    width: 90%;
+    max-width: 400px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ffcc00;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  button {
+    background: #ffcc00;
+    color: #0d47a1;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .checkout-content {
+      padding: 15px;
+    }
+  
+    .booking-info {
+      width: 100%;
+    }
+  
+    input[type="text"] {
+      width: 100%;
+    }
+  }
+  
+  .checkout-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.1); /* Slight background for contrast */
+  }
+  
+  .booking-details {
+    background-color: rgba(174, 168, 168, 0.8); /* Transparent white background */
+    border-radius: 8px;
+    padding: 20px;
+    width: 80%; /* Adjust as needed */
+    max-width: 600px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15); /* Shadow for a subtle lift effect */
+  }
+  
+  .checkout-header h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  h2, h3 {
+    margin-bottom: 10px;
+  }
+  
+  p {
+    margin: 8px 0;
+    font-size: 1.1rem;
+  }
+  
+  .payment-section {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .payment-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .payment-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .generate-pdf-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .generate-pdf-btn:hover {
+    background-color: #218838;
+  }
+  .StripeElement {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Add this CSS to style your card input field properly */
+.card-element {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 400px; /* or any width you'd like */
+}
+
+.stripe-input {
+  width: 100%;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.payment-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.card-element {
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px; /* Adjust width according to your design */
+}

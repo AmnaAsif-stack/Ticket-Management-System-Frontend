@@ -1,285 +1,292 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useHistory } from "react";
 import "./Dashboard.css";
-import { useNavigate, useLocation } from "react-router-dom";
-import jsPDF from "jspdf";
-import { Link } from "react-router-dom";  // Import Link for navigation
-import { TicketBooking } from '../Tickets/BookTicket';  // named import
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-import RoutesList from '../Customer/RouteList';
+import jsPDF from "jspdf";
+import Checkout from "./checkout";
 
 const Dashboard = () => {
-  const [showRoutes, setShowRoutes] = useState(false);
-  const [routes, setRoutes] = useState([]); // Replace this with your actual routes data from the database
-  const [routeSelected, setRouteSelected] = useState(null); // Track selected route
-  const [expandedBus, setExpandedBus] = useState(null); // Track expanded bus schedule
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
-  const [numberOfTickets, setNumberOfTickets] = useState(1);
-  const [showBookingOptions, setShowBookingOptions] = useState(false);
-  const ticketPrice = 100; // Example ticket price (this could be dynamic)
-  const [filter, setFilter] = useState("");
-  const [newTime, setNewTime] = useState("");
-  const [bookings, setBookings] = useState(
-    JSON.parse(localStorage.getItem("bookings")) || []
-  );
-  const [schedule, setSchedule] = useState([]); // Track the fetched schedule for the selected route
-  const [error, setError] = useState([]); // Track the fetched schedule for the selected route
+  const [routes, setRoutes] = useState([]);
+  const [routeSelected, setRouteSelected] = useState(null);
+  const [schedule, setSchedule] = useState([]);
+  const [selectedTime, setSelectedTime] = useState("");
+  const [filteredRoutes, setFilteredRoutes] = useState([]);  // Filtered routes state
+  const [passengerList, setPassengerList] = useState([]);
+  const [newPassengerName, setNewPassengerName] = useState("");
+  const [selectedPassenger, setSelectedPassenger] = useState(null);
+  const [editPassengerName, setEditPassengerName] = useState("");
+  const [userId, setUserId] = useState('');
+  const [passportNumber, setPassportNumber] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [filteredSchedule, setFilteredSchedule] = useState([]);
+  const [routeSearch, setRouteSearch] = useState(""); // State for search input
 
-  const [showMyBookings, setShowMyBookings] = useState(false);
-  const [showTravelHistory, setShowTravelHistory] = useState(false); // Add this line
-
-  const navigate = useNavigate();
-  const location = useLocation();
   const [profile, setProfile] = useState({
     name: "",
-    email: ""
+    email: "",
   });
-
-
-  // Fetch routes from the backend
- // Fetch routes from the backend
- useEffect(() => {
-  fetchRoutes();
-}, []);
-
-const fetchRoutes = () => {
-  console.log("Fetching routes..."); // Check if this is logged
-  fetch("http://localhost:5000/api/routes")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Fetched Routes Data:", data); // Should appear if data is fetched
-      setRoutes(data);
-    })
-    .catch((error) => {
-      console.error("Error fetching routes:", error);
-    });
-};
-
-
-const filterRoutes = routes.filter((route) =>
-  route.name && route.name.toLowerCase().includes(filter.toLowerCase())  // Safe check for 'name'
-);
-
-
-  
-  const handleShowTravelHistory = () => {
-    setShowTravelHistory(!showTravelHistory);
-  };
-  
-  const handleShowMyBookings = () => {
-    setShowMyBookings(!showMyBookings);
-  };
-
-  const routesData = [
-    {
-      id: "route1",
-      name: "Route 1: Downtown to Uptown",
-      buses: [
-        { busId: "B101-1", schedule: ["9:00 AM", "9:30 AM", "10:00 AM"] },
-        { busId: "B101-2", schedule: ["10:30 AM", "11:00 AM", "11:30 AM"] },
-      ],
-    },
-    {
-      id: "route2",
-      name: "Route 2: Central Park to Midtown",
-      buses: [
-        { busId: "B102-1", schedule: ["8:00 AM", "9:00 AM", "10:00 AM"] },
-        { busId: "B102-2", schedule: ["11:00 AM", "12:00 PM", "1:00 PM"] },
-      ],
-    },
-  ];
-
-  const [showTicketInfoDropdown, setShowTicketInfoDropdown] = useState(false);
-  // Handle route selection
-  const handleSelectRoute = (route) => {
-    console.log("Selected route:", route);  // Ensure the route object is correct
-    setRouteSelected(route);  // Set the selected route object
-    setExpandedBus(null);
-    setSchedule([]);  // Clear existing schedule
-    setError("");  // Reset error message
-  
-    // Fetch schedules for the selected route
-    const fetchSchedules = async (routeId) => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/bus-schedules/${routeId}`);
-        console.log("Fetched schedules:", response.data);
-        setSchedule(response.data);  // Set the fetched schedule
-      } catch (err) {
-        console.error("Error fetching schedules:", err.response?.data || err.message);
-        setSchedule([]);  // Clear schedule on error
-        setError("Failed to load schedules. Please try again.");
-      }
-    };
-  
-    fetchSchedules(route.id);  // Pass route.id to the function
-  };
-  
-  
-    
-  
-const handleRouteSelection = (route) => {
-  console.log(route);  // Log the selected route to debug
-  setRouteSelected(route);
-};
-
+  const navigate = useNavigate();  // Correct for React Router v6
+  const [selectedRoute, setSelectedRoute] = useState(null);
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [selectedBooking, setSelectedBooking] = useState(null);
-
-  useEffect(() => {
-    if (location.state?.bookingId) {
-      const bookingId = location.state.bookingId;
-      const foundBooking = bookings.find((booking) => booking.id === bookingId);
-      if (foundBooking) {
-        setSelectedBooking(foundBooking);
-        setRouteSelected({
-          name: foundBooking.routeName,
-          buses: routesData.find((route) => route.name === foundBooking.routeName)
-            .buses,
-        });
-        setSelectedTime(foundBooking.time);
-      }
-    }
-  }, [location, bookings]);
-  const handleShowRoutesClick = () => {
-    setShowRoutes(!showRoutes);
-  };
-  const handleTicketBooking = (event) => {
-    event.preventDefault();
-  
-    if (!routeSelected || !expandedBus || !selectedTime || !selectedDate) {
-      alert("Please complete all fields before booking.");
-      return;
-    }
-  
-    const totalAmount = ticketPrice * numberOfTickets;
-  
-    const newBooking = {
-      id: new Date().toISOString(),
-      routeName: routeSelected.name,
-      busNumber: expandedBus,
-      time: selectedTime,
-      date: selectedDate, // Ensure date is stored
-      tickets: numberOfTickets,
-      amount: totalAmount,
-      paid: false,
-    };
-    
-  
-    const updatedBookings = [...bookings, newBooking];
-    setBookings(updatedBookings);
-    localStorage.setItem("bookings", JSON.stringify(updatedBookings));
-  
-    alert("Booking successful! Proceed to checkout to complete payment.");
-    navigate(`/checkout/${newBooking.id}`);
-  };
-  
-  const handleSaveModifiedTime = () => {
-    if (!selectedBooking || !newTime) return;
-
-    const updatedBooking = { ...selectedBooking, time: newTime };
-
-    const updatedBookings = bookings.map((b) =>
-      b.id === selectedBooking.id ? updatedBooking : b
-    );
-    setBookings(updatedBookings);
-    localStorage.setItem("bookings", JSON.stringify(updatedBookings));
-
-    alert("Bus schedule updated successfully!");
-    navigate(`/checkout/${selectedBooking.id}`);
-  };
-
-  const handleBookOnly = () => {
-    setShowTicketInfoDropdown(true); // Ensure dropdown is shown only on "Book Only"
-  };
-  const handleCancelBooking = (bookingId) => {
-    const updatedBookings = bookings.map((booking) => {
-      if (booking.id === bookingId) {
-        // Mark as canceled and refunded
-        return { ...booking, canceled: true, refundStatus: "Refunded" };
-      }
-      return booking;
+  const [showRoutes, setShowRoutes] = useState(false);
+  const [selectedScheduleDetails, setSelectedScheduleDetails] = useState(null);
+  const [availableDates, setAvailableDates] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
+const [bookingInfo,setBookingInfo]=useState("");
+  // New state for passenger info and fare
+  const [passengerName, setPassengerName] = useState("");
+  const [numSeats, setNumSeats] = useState(1);
+  const [totalFare, setTotalFare] = useState(0);
+  const handleBooking = () => {
+    // Passing state to the checkout page
+    navigate('/checkout', {
+      state: {
+        route: selectedRoute,
+        schedule: selectedSchedule,
+        booking: selectedBooking,
+      },
     });
-  
-    setBookings(updatedBookings);
-    localStorage.setItem("bookings", JSON.stringify(updatedBookings));
-  
-    alert("Your booking has been canceled. Refund will be processed.");
   };
-    const generatePDF = () => {
-    const doc = new jsPDF();
-    doc.setFontSize(16);
 
-    doc.text(`Ticket Confirmation`, 20, 20);
-    doc.text(`-------------------------------------`, 20, 30);
-    doc.text(`Name: ${profile.name}`, 20, 40);
-    doc.text(`Email: ${profile.email}`, 20, 50);
-    doc.text(`Location: ${profile.location}`, 20, 60);
-    doc.text(`Route: ${routeSelected.name}`, 20, 70);
-    doc.text(`Bus Number: ${expandedBus}`, 20, 80);
-    doc.text(`Date: ${selectedDate}`, 20, 85); // Add date
 
-    doc.text(`Departure Time: ${selectedTime}`, 20, 90);
-    doc.text(`Number of Tickets: ${numberOfTickets}`, 20, 100);
-    doc.text(`Total Amount: $${ticketPrice * numberOfTickets}`, 20, 110);
-
-    doc.text(`Payment Status: Pending`, 20, 120);  // Added line for payment status
-
-    doc.text(`-------------------------------------`, 20, 130);
-    doc.text(`Thank you for booking with us!`, 20, 140);
   
-    // Save the PDF with a filename based on the user's name and booking time
-    doc.save(`${profile.name}_Ticket_${new Date().toISOString()}.pdf`);
+  const fetchPassengers = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/passengers");
+      setPassengerList(response.data);
+    } catch (error) {
+      console.error("Error fetching passengers:", error);
+    }
   };
-  const filterRecentBookings = (bookings) => {
-    const today = new Date();
-    const currentMonth = today.getMonth(); // Current month (0-11)
-    const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1; // Handle January case
-    const currentYear = today.getFullYear();
-    const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
   
-    return bookings.filter((booking) => {
-      const bookingDate = new Date(booking.date);
-      const bookingMonth = bookingDate.getMonth();
-      const bookingYear = bookingDate.getFullYear();
+  // Fetch user profile
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/user", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch user profile");
+        }
+        const userData = await response.json();
+        setProfile(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchUserProfile();
+  }, []);
+
+  // Fetch routes
+  useEffect(() => {
+    const fetchRoutes = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/routes");
+        setRoutes(response.data);
+      } catch (error) {
+        console.error("Error fetching routes:", error);
+      }
+    };
+    fetchRoutes();
+  }, []);
+
+  // Fetch schedule for selected route
+  const handleRouteSelection = async (route) => {
+    setRouteSelected(route);
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/bus-schedules/${route._id}`
+      );
+      const schedules = response.data;
+      setSchedule(schedules);
+
+      // Extract available dates from schedules
+      const dates = Array.from(
+        new Set(schedules.map((busSchedule) => new Date(busSchedule.departureTime).toLocaleDateString()))
+      );
+      setAvailableDates(dates);
+
+      // Reset selection and filtered schedule
+      setSelectedDate("");
+      setSelectedTime("");
+      setFilteredSchedule([]);
+    } catch (error) {
+      console.error("Error fetching schedule:", error);
+      setSchedule([]);
+    }
+  };
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    setRouteSearch(searchTerm);
+    
+    const filtered = routes.filter((route) => {
+      const start = route.start ? route.start.toLowerCase() : '';
+      const end = route.end ? route.end.toLowerCase() : '';
+      const name = route.name ? route.name.toLowerCase() : '';
   
       return (
-        (bookingYear === currentYear && bookingMonth === currentMonth) || // Current month
-        (bookingYear === lastMonthYear && bookingMonth === lastMonth) // Last month
+        start.includes(searchTerm) ||
+        end.includes(searchTerm) ||
+        name.includes(searchTerm)
       );
     });
+    setFilteredRoutes(filtered); // Update filtered routes
   };
-    // Fetch user profile on component mount
-    useEffect(() => {
-      const fetchUserProfile = async () => {
-        try {
-          const response = await fetch("http://localhost:5000/api/user", {
-            method: "GET",
-            headers: {
-              "Authorization": `Bearer ${localStorage.getItem("token")}`, // Assuming you're using JWT tokens
-            },
-          });
-          if (!response.ok) {
-            throw new Error("Failed to fetch user profile");
-          }
-          const userData = await response.json();
-          setProfile(userData);
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          // You can handle error here by redirecting to login page or showing a message
-        }
-      };
   
-      fetchUserProfile();
-    }, []);
-    const handleManageProfile = () => {
-      navigate("/passenger-management");
+  // Handle date selection and filter schedule by date
+  const handleDateSelection = (date) => {
+    setSelectedDate(date);
+
+    // Filter schedules by selected date
+    const filteredByDate = schedule.filter(
+      (busSchedule) =>
+        new Date(busSchedule.departureTime).toLocaleDateString() === date
+    );
+    setFilteredSchedule(filteredByDate);
+    setSelectedTime(""); // Reset time selection
+    fetchFareFromDB(routeSelected._id);
+    // Check for fare related to selected route and date
+  };
+
+
+ 
+  const handleTimeSelection = (time) => {
+    setSelectedTime(time);
+  
+    // Parse the time string as a Date object for comparison
+    const selectedTimeObj = new Date(time);
+  
+    const selectedSchedule = filteredSchedule.find(
+      (item) =>
+        new Date(item.departureTime).getTime() === selectedTimeObj.getTime() // Compare timestamps
+    );
+  
+    if (selectedSchedule) {
+      setSelectedScheduleDetails(selectedSchedule);
+    } else {
+      setSelectedScheduleDetails(null); // Handle undefined case
+    }
+  };
+  
+  // Fetch fare for the selected route and date
+ // Fetch fare dynamically from the fare schema
+ const fetchFareFromDB = async (routeId) => {
+  console.log("Fetching fare for routeId:", routeId);
+  try {
+    const response = await axios.get("http://localhost:5000/api/fare", {
+      params: { routeId },
+    });
+
+    if (response.data && response.data.fare) {
+      const baseFare = response.data.fare.baseFare || 0; 
+      setTotalFare(baseFare); // Save base fare directly
+    } else {
+      alert("No fare information found for this route.");
+      setTotalFare(0);
+    }
+  } catch (error) {
+    console.error("Error fetching fare data:", error);
+    alert("Failed to fetch fare.");
+  }
+};
+
+
+
+  // Handle ticket booking
+  const handleBookTicket = async () => {
+    if (!routeSelected || !routeSelected._id) {
+      alert("Route not selected or invalid.");
+      return;
+    }
+
+    if (!filteredSchedule.length || !filteredSchedule[0]._id) {
+      alert("Schedule not selected or invalid.");
+      return;
+    }
+
+    if (!passengerName || numSeats <= 0) {
+      alert("Please provide valid passenger information and number of seats.");
+      return;
+    }
+
+    const bookingData = {
+      customerName: passengerName,
+      customerEmail: profile.email,
+      route: routeSelected._id,
+      schedule: filteredSchedule[0]._id,      seatsBooked: numSeats,
+      totalFare: totalFare * numSeats,
+      paymentStatus: "pending", // Default status
     };
-  
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/bookings",
+        bookingData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        const bookingDetails = response.data;
+        setBookingInfo(bookingDetails);
+        navigate("/checkout", { state: { bookingId: response.data.booking._id } });
+
+        alert("Ticket booked successfully!");
+      } else {
+        alert("Failed to book ticket. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error booking ticket:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "Failed to book ticket. Please try again.");
+    }
+  };
+
+
+
+useEffect(() => {
+  console.log(bookingInfo); // Log the booking info for debugging
+
+}, [bookingInfo, navigate]);
+const handleGeneratePDF = () => {
+  if (!bookingInfo) return;
+
+  const doc = new jsPDF();
+  doc.setFontSize(12);
+  doc.text("Booking Details", 10, 10);
+  doc.text(`Booking ID: ${bookingInfo.bookingId}`, 10, 20);
+  doc.text(`Passenger Name: ${bookingInfo.passengerName}`, 10, 30);
+  doc.text(`Route: ${bookingInfo.route}`, 10, 40);
+  doc.text(`Seats Booked: ${bookingInfo.seatsBooked}`, 10, 50);
+  doc.text(`Total Fare: ₹${bookingInfo.totalFare}`, 10, 60);
+  doc.text(`Payment Status: ${bookingInfo.paymentStatus}`, 10, 70); // Payment Status
+  doc.text(
+    `Departure Time: ${new Date(bookingInfo.schedule.departureTime).toLocaleString()}`,
+    10,
+    80
+  );
+  doc.text(
+    `Arrival Time: ${new Date(bookingInfo.schedule.arrivalTime).toLocaleString()}`,
+    10,
+    90
+  );
+
+  doc.save(`booking-${bookingInfo.bookingId}.pdf`);
+};
+const handleCheckoutClick = () => {
+  navigate('/checkout');
+};
+
+
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
@@ -287,241 +294,192 @@ const handleRouteSelection = (route) => {
         <p>Explore routes, schedules, and book your tickets here.</p>
       </header>
 
-      <div>
-           
-            <RoutesList />
-        </div>
-
-      
       <div className="user-profile">
-      <h2>Welcome, {profile.name || "User"}</h2>
-      <p>Email: {profile.email || "Not available"}</p>
-      <button onClick={handleManageProfile}>Manage Profile</button>
-      
-      <button onClick={handleShowTravelHistory}>
-        {handleShowTravelHistory ? "Show Travel History" : "Hide Travel History"}
-      </button>
-    </div>
+        <h2>Welcome, {profile.name || "User"}</h2>
+        <p>Email: {profile.email || "Not available"}</p>
      
-     
-      {showTravelHistory && (
-        <div className="travel-history">
-          <h3>Your Travel History</h3>
-          {filterRecentBookings(bookings).length === 0 ? (
-            <p>You have no travel history from the last or current month.</p>
-          ) : (
-            <ul>
-              {filterRecentBookings(bookings).map((booking) => (
-                <li key={booking.id}>
-                  <p>Route: {booking.routeName}</p>
-                  <p>Bus Number: {booking.busNumber}</p>
-                  <p>Date: {booking.date}</p>
-                  <p>Time: {booking.time}</p>
-                  <p>Status: {booking.canceled ? "Canceled" : "Active"}</p>
-                  {booking.canceled && <p>Refund Status: {booking.refundStatus}</p>}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
+<button onClick={() => navigate("/passenger-management")}>Manage Profile</button>
 
-<div className="dashboard-actions">
-        <button onClick={handleShowMyBookings}>
-          {showMyBookings ? "Hide My Bookings" : "Show My Bookings"}
-        </button>
-        {/* Add Travel History button */}
-        <button onClick={handleShowTravelHistory}>
-          {showTravelHistory ? "Hide Travel History" : "Show Travel History"}
-        </button>
       </div>
-
-      {showMyBookings && (
-  <div className="my-bookings-section">
-    <h3>My Bookings</h3>
-    {filterRecentBookings(bookings).length === 0 ? (
-      <p>You have no bookings from the last or current month.</p>
-    ) : (
-      <ul>
-        {filterRecentBookings(bookings).map((booking) => (
-          <li key={booking.id} className={`booking-item ${booking.canceled ? "canceled" : ""}`}>
-            <p>Route: {booking.routeName}</p>
-            <p>Bus Number: {booking.busNumber}</p>
-            <p>Date: {booking.date}</p>
-            <p>Time: {booking.time}</p>
-            <p>Tickets: {booking.tickets}</p>
-            <p>Total Amount: ${booking.amount}</p>
-            <p>Status: {booking.canceled ? "Canceled" : "Active"}</p>
-            {booking.canceled && <p>Refund Status: {booking.refundStatus}</p>}
-            {!booking.canceled && (
-              <button onClick={() => handleCancelBooking(booking.id)}>
-                Cancel Booking
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-)}
+     
+      <div>
+    {/* Search Bar */}
+    <input
+  type="text"
+  value={routeSearch}
+  onChange={handleSearchChange}
+  placeholder="Search for a route"
+  className="search-bar"
+  
+/>
 
 
- {/* Show Travel History Section */}
 
- <div className="show-routes-button">
-      {/* Toggle Button to Show/Hide Routes */}
-      <button onClick={handleShowRoutesClick}>
-        {showRoutes ? 'Hide Routes' : 'Show Routes'}
+
+      </div>
+      <button onClick={() => setShowRoutes(!showRoutes)} className="show-routes-btn">
+        {showRoutes ? "Hide Routes" : "Show Routes"}
       </button>
 
-      {/* Conditionally render routes */}
-      {showRoutes && routes.length > 0 ? (
-        <div className="routes-container">
-          {routes.map((route) => (
-            <div key={route._id} className="route-card">
-              <h3>{route.start} to {route.end}</h3>
-              <p><strong>Distance:</strong> {route.distance} km</p>
-              <p><strong>Stops:</strong> {route.stops.join(', ')}</p>
-              <button
-                className="select-route-button"
-                onClick={() => handleSelectRoute(route)}
-              >
-                Select Route
-              </button>
+      {showRoutes && (
+        <div className="routes-section">
+          <h3>Available Routes</h3>
+          <div className="routes-grid-container">
+            <div className="routes-grid">
+            {filteredRoutes.length > 0 ? (
+  filteredRoutes.map((route) => (
+    <div key={route._id} className="route-card">
+      <h4>{route.start} to {route.end}</h4>
+      <p><strong>Distance:</strong> {route.distance} km</p>
+      <p><strong>Stops:</strong> {route.stops} </p>
+      <p><strong>Duration:</strong> {route.estimatedDuration} Hours</p>
+      <p><strong>Status:</strong> {route.status || "Available"}</p>
+      <button
+        className="select-route-btn"
+        onClick={() => handleRouteSelection(route)}
+      >
+        Select Route
+      </button>
+    </div>
+  ))
+) : (
+  <p>No routes available.</p>
+)}
             </div>
-          ))}
+          </div>
         </div>
-      ) : (
-        <p>{showRoutes ? 'No routes available' : ''}</p>
       )}
 
-{routeSelected && (
-  <div className="route-schedule">
-    <h3>Bus Schedule for {routeSelected.start} to {routeSelected.end}</h3>
-    {console.log("Schedule state:", schedule)}  {/* Log the schedule state */}
-    {console.log("Route Selected:", routeSelected)}  {/* Log the selected route */}
-    {error ? (
-      <p>{error}</p>
-    ) : schedule.length ? (
-      schedule.map((bus) => (
-        <div key={bus._id}>
-          <p><strong>Bus ID:</strong> {bus._id}</p>
-          <p><strong>Departure Time:</strong> {new Date(bus.departureTime).toLocaleString()}</p>
-          <p><strong>Arrival Time:</strong> {new Date(bus.arrivalTime).toLocaleString()}</p>
-          <p><strong>Status:</strong> {bus.status}</p>
-        </div>
-      ))
-    ) : (
-      <p>Loading schedule...</p>
-    )}
-  </div>
-)}
+      {/* Schedule Form Section */}
+      {routeSelected && (
+        <div className="schedule-section">
+          <div className="schedule-container">
+          <h3>Schedules for {routeSelected.start} to {routeSelected.end}</h3>
 
-    </div>
-  
-    
-
-      {selectedBooking && (
-        <div className="modify-bus-timing">
-          <h3>Modify Bus Timing for Your Booking</h3>
-          <p>
-            You currently have a booking for {selectedBooking.routeName} at{" "}
-            {selectedBooking.time}.
-          </p>
-          <label>Select New Time: </label>
-          <select
-            value={newTime}
-            onChange={(e) => setNewTime(e.target.value)}
-          >
-            <option value="">Select a new time</option>
-            {routeSelected.buses
-              .find((bus) => bus.busId === selectedBooking.busNumber)
-              .schedule.map((time, idx) => (
-                <option key={idx} value={time}>
-                  {time}
+            {/* Date Selection Dropdown */}
+            {schedule.length > 0 && (
+              <div className="select-date">
+                <h4>Select Date</h4>
+                <select onChange={(e) => handleDateSelection(e.target.value)}>
+              <option value="">Select Date</option>
+              {availableDates.map((date, index) => (
+                <option key={index} value={date}>
+                  {date}
                 </option>
               ))}
-          </select>
-          <button type="button" onClick={handleSaveModifiedTime}>
-            Save New Time
+            </select>
+          </div>
+            )}
+
+{selectedDate && filteredSchedule.length > 0 && (
+              <div className="select-time">
+                <h4>Select Time</h4>
+                <select
+                  value={selectedTime}
+                  onChange={(e) => handleTimeSelection(e.target.value)}
+                >
+                  <option value="">Select a time</option>
+                  {filteredSchedule.map((busSchedule, index) => (
+                    <option
+                      key={index}
+                      value={new Date(busSchedule.departureTime).toLocaleString()}
+                    >
+                      {new Date(busSchedule.departureTime).toLocaleTimeString(
+                        "en-US",
+                        {
+                          timeZone: "UTC",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        }
+                      )}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+{selectedScheduleDetails && (
+  <div className="passenger-info">
+    <h4>Selected Schedule Details</h4>
+    <p><strong>Bus Number:</strong> {selectedScheduleDetails.bus?.licensePlate || "N/A"}</p>
+    <p><strong>Departure Time:</strong> {selectedScheduleDetails.departureTime ? new Date(selectedScheduleDetails.departureTime).toLocaleString() : "N/A"}</p>
+    <p><strong>Arrival Time:</strong> {new Date(selectedScheduleDetails.arrivalTime).toLocaleString()}</p>
+    <p><strong>Seats Available:</strong> {selectedScheduleDetails.availableSeats}</p>
+    {/* More fields */}
+ 
+
+          <h4>Passenger Information</h4>
+          <label>
+            Name:
+            <input
+              type="text"
+              value={passengerName}
+              onChange={(e) => setPassengerName(e.target.value)}
+              placeholder="Enter your name"
+            />
+          </label>
+
+          <label>
+            Number of Seats:
+            <input
+              type="number"
+              value={numSeats}
+              onChange={(e) => setNumSeats(Number(e.target.value))}
+              min="1"
+              max={selectedScheduleDetails.availableSeats}
+            />
+          </label>
+
+          <p><strong>Total Fare:</strong> ₹{totalFare * numSeats}</p>
+
+          <button
+       onClick={handleBookTicket}
+            className="book-ticket-btn"
+            disabled={numSeats > selectedScheduleDetails.availableSeats}
+          >
+            Book Ticket
+          </button>
+        </div>
+      )}
+      {bookingInfo && (
+        <div className="booking-details">
+          <h4>Booking Successful!</h4>
+          <p><strong>Booking ID:</strong> {bookingInfo.bookingId}</p>
+          <p><strong>Passenger Name:</strong> {bookingInfo.passengerName}</p>
+          <p><strong>Route:</strong> {bookingInfo.route}</p>
+          <p><strong>Seats Booked:</strong> {bookingInfo.seatsBooked}</p>
+          <p><strong>Total Fare:</strong> Rs{bookingInfo.totalFare}</p>
+          <p><strong>Payment Status:</strong> {bookingInfo.paymentStatus}</p> {/* Payment Status */}
+          <p>
+  {new Date(bookingInfo.schedule.departureTime).toLocaleDateString("en-US", {
+    timeZone: "UTC", // Ensures the time is shown in UTC
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true, // 12-hour format with AM/PM
+  })}
+</p>
+<p>
+  <strong>Arrival Time:</strong>{" "}
+  {new Date(bookingInfo.schedule.arrivalTime).toLocaleDateString("en-US", {
+    timeZone: "UTC", // Ensures the time is shown in UTC
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true, // 12-hour format with AM/PM
+  })}
+</p>
+
+          <button onClick={handleGeneratePDF} className="generate-pdf-btn">
+            Generate PDF
           </button>
         </div>
       )}
 
-{showTicketInfoDropdown && (
-  <div className="ticket-info-dropdown">
-    <h3>Booking Summary</h3>
-    <p>Route: {routeSelected.name}</p>
-    <p>Bus Number: {expandedBus}</p>
-    <p>Date: {selectedDate}</p> {/* Display selected date */}
-    <p>Time: {selectedTime}</p>
-    <p>Tickets: {numberOfTickets}</p>
-    <p>Total Price: ${ticketPrice * numberOfTickets}</p>
-    <button onClick={generatePDF}>Confirm Booking</button>
-  </div>
-)}
-
-    </div>
-
-    
-  );
-  
-};
-const BrowseRoutes = ({ routes, filter, setFilter, onSelectRoute }) => (
-  <div className="route-list">
-    <input
-      type="text"
-      placeholder="Search routes"
-      value={filter}
-      onChange={(e) => setFilter(e.target.value)}
-    />
-    <ul>
-      {routes.length === 0 ? (
-        <p>Loading routes...</p>
-      ) : (
-        routes.map((route) => (
-          <li key={route._id}>
-            <button onClick={() => onSelectRoute(route)}>{route.name}</button>
-          </li>
-        ))
+          </div>
+        </div>
       )}
-    </ul>
-  </div>
-);
-
-const UserProfile = ({ profile, handleShowTravelHistory }) => {
-  const navigate = useNavigate();
-
-  return (
-    <div className="user-profile">
-      <h2>Welcome, {profile.name || "User"}</h2>
-      <p>Email: {profile.email || "Not available"}</p>
-      <p>Location: {profile.location || "Not available"}</p>
-      <button onClick={() => navigate("/passenger-management")}>
-        Manage Profile
-      </button>
-      <button onClick={handleShowTravelHistory}>
-        Toggle Travel History
-      </button>
     </div>
   );
 };
 
-const RouteList = ({ routes, filter, setFilter, onSelectRoute }) => (
-  <div className="route-list">
-    <input
-      type="text"
-      placeholder="Search routes"
-      value={filter}
-      onChange={(e) => setFilter(e.target.value)}
-    />
-    <ul>
-      {routes.map((route) => (
-        <li key={route._id}>
-          <button onClick={() => onSelectRoute(route)}>{route.name}</button>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
 export default Dashboard;
